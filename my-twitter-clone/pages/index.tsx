@@ -43,18 +43,25 @@ export default function HomePage() {
     };
   }, []);
 
-  const fetchTweets = async () => {
-    const { data, error } = await supabase
-      .from('tweets')
-      .select(`id, content, created_at, user_id, profiles(username)`)
-      .order('created_at', { ascending: false });
+const fetchTweets = async () => {
+  const { data, error } = await supabase
+    .from('tweets')
+    .select(`
+      id,
+      content,
+      created_at,
+      user_id,
+      profiles:profiles!inner(username)
+    `)
+    .order('created_at', { ascending: false });
 
-    if (error) {
-      console.error('Error fetching tweets', error);
-    } else {
-      setTweets(data as TweetRow[]);
-    }
-  };
+  if (error) {
+    console.error('Error fetching tweets', error);
+  } else {
+    //setTweets(data as TweetRow[]);
+  }
+};
+
 
   const handlePost = async (e: React.FormEvent) => {
     e.preventDefault();
